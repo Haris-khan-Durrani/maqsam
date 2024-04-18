@@ -758,6 +758,8 @@ function loadtablein() {
         calref VARCHAR(255) NOT NULL,
         agent VARCHAR(255) NOT NULL,
         astatus VARCHAR(255) NOT NULL,
+	completelog longtext DEFAULT NULL,
+ 	callon datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
         PRIMARY KEY (id)
     ) $charset_collate;";
 
