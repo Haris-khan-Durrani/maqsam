@@ -109,7 +109,10 @@ function maqsam_api_settings_page() {
                     <th scope="row">If Client Terminate 3 times Push Data To this URL</th>
                     <td><input type="text" name="maqsam_crcd" value="<?php echo esc_attr(get_option('maqsam_crcd')); ?>" /></td>
                 </tr>
-                
+                     <tr valign="top">
+                    <th scope="row">Hit Everyevent Data To this URL</th>
+                    <td><input type="text" name="maqsam_hedt" value="<?php echo esc_attr(get_option('maqsam_hedt')); ?>" /></td>
+                </tr>
                 
                     <tr valign="top" style="display:none">
                     <th scope="row">Callback Url</th>
@@ -140,6 +143,7 @@ function maqsam_api_register_settings() {
                                   register_setting('maqsam-api-settings-group', 'maqsam_prcd');
                                                                     register_setting('maqsam-api-settings-group', 'maqsam_nrcd');
                                                                       register_setting('maqsam-api-settings-group', 'maqsam_crcd');
+                                                                       register_setting('maqsam-api-settings-group', 'maqsam_hedt');
 }
 
 add_action('admin_init', 'maqsam_api_register_settings');

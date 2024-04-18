@@ -702,7 +702,7 @@ add_action('wp_footer', 'headcode',10);
 
 function headache(){
     $suffix =  mt_rand(1000, 9999);
-    wp_enqueue_style('intlTelInput-css', plugin_dir_url(__FILE__).'style.css');
+    wp_enqueue_style('intlTelInput-css', plugin_dir_url(__FILE__).'style.css?asdas=4546');
            wp_enqueue_script('iti-load-utils', 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/utils.js?v123='.$suffix, '', '', true);
            wp_enqueue_script('intlTelInput', 'https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.3/build/js/intlTelInput.js?v123='.$suffix, '', '', true);
            wp_enqueue_script('intlTelInput-js', 'https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.5/build/js/intlTelInput.min.js?v123='.$suffix, '', '', true);
@@ -770,24 +770,130 @@ function loadtablein() {
 
 
 
-function insertagentcall($callinit_value,$callref,$callagnt,$callstatus){
+function insertagentcall($callinit_value,$callref,$callagnt,$callstatus,$log){
     global $wpdb;
-$table_name = $wpdb->prefix . 'callrec'; 
+$table_name = $wpdb->prefix.'callrec'; 
 $data = array(
     'callinit' => $callinit_value,
     'calref'   => $callref,
     'agent'    => $callagnt,
     'astatus'  => $callstatus,
+    'completelog'=>$log,
 );
 $format = array(
     '%s', // for string
     '%s', // for string
     '%s', // for string
     '%s', // for string
+     '%s', // for string
 );
 $wpdb->insert($table_name, $data, $format);
 }
 
+
+
+function insertagentcalllog($callinit_value,$log){
+    global $wpdb;
+$table_name = $wpdb->prefix . 'calllog'; 
+$data = array(
+    'callid' => $callinit_value,
+   
+    'callog'=>$log,
+);
+$format = array(
+    '%s', // for string
+    '%s', // for string
+ 
+);
+$wpdb->insert($table_name, $data, $format);
+}
+
+
+// Step 1: Add a new submenu for displaying the call records
+function add_call_records_submenu() {
+    add_submenu_page(
+        'my-plugin-settings',  // parent slug
+        'Call Records',        // page title
+        'Call Records',        // menu title
+        'manage_options',      // capability
+        'call-records',        // menu slug
+        'display_call_records' // function to display the page content
+    );
+}
+add_action('admin_menu', 'add_call_records_submenu');
+
+// Step 1: Function to display data from wp_callrec with new columns
+function display_call_records() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'callrec';
+    $per_page = 10; // Number of records per page
+    $page = isset($_GET['paged']) ? max(0, intval($_GET['paged']) - 1) : 0;
+    $offset = $page * $per_page;
+
+    // Handle search
+    $search_query = isset($_POST['s']) ? esc_sql($_POST['s']) : '';
+
+    // Delete action
+    if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
+        $id_to_delete = intval($_GET['id']);
+        $wpdb->delete($table_name, ['id' => $id_to_delete]);
+        echo '<div class="updated"><p>Record deleted.</p></div>';
+    }
+
+    // Search and pagination query
+    $query = "SELECT * FROM $table_name";
+    if (!empty($search_query)) {
+        $query .= " WHERE `callinit` LIKE '%$search_query%' OR `agent` LIKE '%$search_query%'";
+    }
+    $total_query = "SELECT COUNT(1) FROM (${query}) AS combined_table";
+    $total = $wpdb->get_var($total_query);
+    $query .= " LIMIT ${offset}, ${per_page}";
+    $results = $wpdb->get_results($query, ARRAY_A);
+
+    // Display search form
+    echo '<form method="post">';
+    echo '<input type="text" name="s" placeholder="Search calls..." value="' . esc_attr($search_query) . '"/>';
+    echo '<input type="submit" value="Search"/>';
+    echo '</form>';
+
+    // Display records
+    echo '<table class="wp-list-table widefat fixed striped">';
+    echo '<thead><tr><th>ID</th><th>Call Initiated</th><th>Agent</th><th>Status</th><th>Complete Log</th><th>Call On</th><th>Actions</th></tr></thead>';
+    echo '<tbody>';
+
+    foreach ($results as $row) {
+        $log = json_decode($row['completelog'], true);
+        $log_output = '';
+        foreach ($log as $key => $value) {
+            $log_output .= '<strong>' . $key . '</strong>: ' . $value . '<br>';
+        }
+
+        echo '<tr>';
+        echo '<td>' . $row['id'] . '</td>';
+        echo '<td>' . $row['callinit'] . '</td>';
+        echo '<td>' . $row['agent'] . '</td>';
+        echo '<td>' . $row['astatus'] . '</td>';
+        echo '<td>' . $log_output . '</td>';
+        echo '<td>' . $row['callon'] . '</td>';
+        echo '<td><a href="?page=call-records&action=delete&id=' . $row['id'] . '" onclick="return confirm(\'Are you sure?\')">Delete</a></td>';
+        echo '</tr>';
+    }
+
+    echo '</tbody></table>';
+
+    // Pagination
+    $num_pages = ceil($total / $per_page);
+    $page_links = paginate_links(array(
+        'base' => add_query_arg('paged', '%#%'),
+        'format' => '',
+        'prev_text' => '&laquo;',
+        'next_text' => '&raquo;',
+        'total' => $num_pages,
+        'current' => $page + 1
+    ));
+
+    echo "<div class='tablenav'><div class='tablenav-pages'>$page_links</div></div>";
+}
 
 
 

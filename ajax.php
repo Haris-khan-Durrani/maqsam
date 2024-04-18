@@ -71,12 +71,13 @@ $agent=around();
 // Prepare data for the conference request
 $requestData = array(
     "FirstParty" => "$agent",
+       "FirstPartyMaxTrials" => 1,
     "SecondParty" => "$phone_number",
     "TuneUrl" => "$aptu",
     "ApologyUrl" => "$apurl",
     "ConfirmUrl" => "$apconf",
     "TimeoutUrl" => "$aptiurl",
-    "FirstPartyMaxTrials" => "1",
+ 
     "CallbackUrl" => "https://api.ebmsportal.com/shopify/myfile.php?cback=$cback&agnm=$agname&client=$phone_number&agn=$agent&type=$type"
  
 );

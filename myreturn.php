@@ -103,7 +103,7 @@ $maqr=esc_attr(get_option('maqsam_rr'));
 global $wpdb;
 
     // Define the table name
-$table_name = $wpdb->prefix . 'callrec'; 
+$table_name = $wpdb->prefix.'callrec'; 
 // Replace 'your_table_name' with the actual table name
 
 // Perform a SELECT COUNT(*) query
@@ -145,6 +145,7 @@ $plugin_directory_url = "https://api.ebmsportal.com/shopify/myfile.php";
    $nrcd=esc_attr(get_option('maqsam_nrcd'));
       //push data if client Terminated3 times 
    $crcd=esc_attr(get_option('maqsam_crcd'));
+      $hedt=esc_attr(get_option('maqsam_hedt'));
    
    
  $phone_number=$clientnumb; 
@@ -158,8 +159,8 @@ $conferenceEndpoint = $apiep;
 $agnum = str_replace("+", "", $agnum);
 $agent_name=agdet($agnum);
 
-
-
+insertagentcalllog($callcode,$content);
+  file_get_contents("$hedt?cback=$cback&clientname=$clientName&client=$phone_number&argn=$clientnumb&type=$callcode&agentname=$agent_name&agentnumber=$agnum&recordingurl=$recordingurl&event=$event&fpur=$firstpartyunreachablereason&spt=$spt&second_party_conneted=$secondpartyconnected&allcont=$content");
 
 
 
@@ -169,10 +170,10 @@ if($recordingurl!="")
 {
     $recordingurl=urlencode($recordingurl);
  $jk=file_get_contents("https://app.crmsoftware.ae/api/message.php?agent=+971562559270&client=+971562559270&country=AE&message=$recordingurl Recorded File");   
-      insertagentcall($callcode,$cfid,$agnum,"Call Done");
+      insertagentcall($callcode,$cfid,$agnum,"Call Done",$content);
       $agnum = str_replace("+", "", $agnum);
       $agent_name=agdet($agnum);
-      file_get_contents("$prcd?cback=$cback&clientname=$clientName&client=$phone_number&argn=$clientnumb&type=$callcode&agentname=$agent_name&agentnumber=$agnum&recordingurl=$recordingurl");
+      file_get_contents("$prcd?cback=$cback&clientname=$clientName&client=$phone_number&argn=$clientnumb&type=$callcode&agentname=$agent_name&agentnumber=$agnum&recordingurl=$recordingurl&event=$event&fpur=$firstpartyunreachablereason&spt=$spt");
 }
 
 
@@ -180,10 +181,10 @@ if($recordingurl!="")
 else if($spt==3){
         $recordingurl=urlencode($recordingurl);
  $jk=file_get_contents("https://app.crmsoftware.ae/api/message.php?agent=+971562559270&client=+971562559270&country=AE&message=$recordingurl Recorded File");   
-      insertagentcall($callcode,$cfid,$agnum,"Client Terminated After 3rd time");
+      insertagentcall($callcode,$cfid,$agnum,"Client Terminated After 3rd time",$content);
       $agnum = str_replace("+", "", $agnum);
       $agent_name=agdet($agnum);
-      file_get_contents("$crcd?cback=$cback&clientname=$clientName&client=$phone_number&argn=$clientnumb&type=$callcode&agentname=$agent_name&agentnumber=$agnum&recordingurl=$recordingurl");
+      file_get_contents("$crcd?cback=$cback&clientname=$clientName&client=$phone_number&argn=$clientnumb&type=$callcode&agentname=$agent_name&agentnumber=$agnum&recordingurl=$recordingurl&event=$event&fpur=$firstpartyunreachablereason&spt=$spt");
 }
 
 
@@ -196,12 +197,13 @@ if ($count < $maqr) {
 $agent=around();
 $requestData = array(
     "FirstParty" => "$agent",
+       "FirstPartyMaxTrials" => 1,
     "SecondParty" => "$clientnumb",
     "TuneUrl" => "$aptu",
     "ApologyUrl" => "$apurl",
     "ConfirmUrl" => "$apconf",
     "TimeoutUrl" => "$aptiurl",
-    "FirstPartyMaxTrials" => "1",
+
     "CallbackUrl" => "https://api.ebmsportal.com/shopify/myfile.php?cback=$cback&agnm=$clientName&client=$phone_number&agn=$clientnumb&type=$callcode"
 );
 // Convert request data to x-www-form-urlencoded format
@@ -229,8 +231,8 @@ curl_close($ch);
 if (!empty($response)) {
     if ($response !== null) {
         echo "Conference request successful:", print_r($response, true)." https://api.ebmsportal.com/shopify/myfile.php -> $agent";
-    file_get_contents("https://app.crmsoftware.ae/api/message.php?agent=+971562559270&client=+971562559270&country=AE&message=$agent Call $count initiated $response");
-        insertagentcall($callcode,$cfid,$agnum,"Unreachable");
+    file_get_contents("https://app.crmsoftware.ae/api/message.php?agent=+971562559270&client=+971562559270&country=AE&message=$agent Call $count initiated $response->$callcode");
+        insertagentcall($callcode,$cfid,$agnum,"Unreachable",$content);
     } else {
         echo "Error decoding JSON response";
     }

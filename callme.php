@@ -8,12 +8,12 @@
     </svg></label>
 
 </div>
-<input type="checkbox" id="css-modal-checkbox" />	
-<div class="cmc Harismodal" style="display:none">
+<input type="checkbox" id="css-modal-checkbox" style="display:none"/>	
+<div class="cmc Harismodal" style="display:none;z-index: 10000;">
     <div class="cmt">
 	<div class="popupheading">
         <img src="<?php echo $logourl; ?>" style="width: 200px;padding-top: 10px;">
-<h1>Get a call within 30 seconds</h1>
+<h1 style="margin-bottom: 0px">Get a call within 30 seconds</h1>
 <h2>  Leave your number below
     </h2>and we will call you right away!
 
@@ -65,6 +65,12 @@
 	.phone-call,.phone-call:before {
 			background-color:<?php echo $bc." !important"; ?>
 	}
+	
+	#css-modal-checkbox:checked + .cmc,.phone-call {
+   
+    z-index: 400000 !important;
+  
+}
 	
 </style>
 
