@@ -31,13 +31,17 @@ Technologies used in the project:
 *   Jquery
 
 Certainly! Here are the detailed installation steps for Maqsam Call on your WordPress site, including screenshots at each stage:
- 
+
+
+<h2>Screenshot</h2> 
 <img src="https://app.crmsoftware.ae/writable/uploads/1713454075_e7ee82667a461102864d.jpg" alt="project-screenshot" width="400" height="400/">
 
 <img src="https://app.crmsoftware.ae/writable/uploads/1713454075_c989fdc127c761e1672f.jpg" alt="project-screenshot" width="400" height="400/">
 
 <img src="https://app.crmsoftware.ae/writable/uploads/1713454075_024edf6b8909dc7b694d.jpg" alt="project-screenshot" width="400" height="400/">
 
+
+<h2>Setup...</h2> 
 Step 1: Navigate to Maqsam Call Widget
 •	Login to your WordPress dashboard.
 •	On the left-hand menu, find the "Maqsam Call" widget.
