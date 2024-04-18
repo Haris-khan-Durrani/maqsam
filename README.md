@@ -1,4 +1,10 @@
 MAQSAM WORDPRESS PLUGIN Documentation
+<h2>🚀 Demo</h2>
+
+[https://ebmsbusiness.com](https://ebmsbusiness.com)
+[https://expertplus.ae/](https://expertplus.ae/)
+
+
 
 Introducing "Maqsam Call" – the ultimate WordPress plugin seamlessly integrated with Maqsam's conference call feature, redefining the way clients and sales agents connect. This powerful tool transforms your WordPress site into a communication hub, facilitating direct and efficient interactions with just a few simple steps.
 
@@ -14,8 +20,23 @@ Installing Maqsam Call on your WordPress site is a straightforward process. Foll
 •	Once logged in, locate the WordPress dashboard menu on the left-hand side.
 •	Look for the "Maqsam Call" widget. You may find it in the main menu or within a specific section, depending on your WordPress theme and configuration.
 
+<h2>💻 Built with</h2>
+
+Technologies used in the project:
+
+*   PHP
+*   Javascript
+*   Mysql
+*   Wordpress
+*   Jquery
+
 Certainly! Here are the detailed installation steps for Maqsam Call on your WordPress site, including screenshots at each stage:
  
+<img src="https://app.crmsoftware.ae/writable/uploads/1713454075_e7ee82667a461102864d.jpg" alt="project-screenshot" width="400" height="400/">
+
+<img src="https://app.crmsoftware.ae/writable/uploads/1713454075_c989fdc127c761e1672f.jpg" alt="project-screenshot" width="400" height="400/">
+
+<img src="https://app.crmsoftware.ae/writable/uploads/1713454075_024edf6b8909dc7b694d.jpg" alt="project-screenshot" width="400" height="400/">
 
 Step 1: Navigate to Maqsam Call Widget
 •	Login to your WordPress dashboard.
